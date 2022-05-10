@@ -8,7 +8,7 @@ detector = model.yolov2Detector;
 
 % Detect Objects using YOLO v2 Object Detector
 % Read test image.
-image = imread('datasets/coco/3cats.jpg');
+image = imread('3cats.jpg');
 
 % Detect objects in test image.
 [boxes, scores, labels] = detect(detector, image);
