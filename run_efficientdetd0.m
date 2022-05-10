@@ -1,7 +1,10 @@
-addpath('models/efficientdet-d0-main');
+addpath('models/pretrained-efficientdet-d0-main/src');
+addpath('models/pretrained-efficientdet-d0-main');
 
 modelName = 'efficientDetD0-coco';
-model = load(['models/efficientdet-d0-main/', modelName, '.mat']);
+
+% download model - function from downloadPretrainedEfficientDetD0.m
+model = downloadPretrainedEfficientDetD0;
 net = model.net;
 
 image = imread('3cats.jpg');

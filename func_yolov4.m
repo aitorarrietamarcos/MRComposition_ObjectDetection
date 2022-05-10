@@ -1,11 +1,11 @@
 function func_yolov4(datasets, results_dir)
     % add paths for YOLOv4-coco            
     addpath('models/pretrained-yolo-v4-main/src');
-    addpath('models/pretrained-yolo-v4-main'); 
+    addpath('models/pretrained-yolo-v4-main');            
 
+    % load model    
     modelName = 'YOLOv4-coco';
-    % load model
-    model = load(['models/yolo-v4-main/', modelName, '.mat']);
+    model = helper.downloadPretrainedYOLOv4(modelName);
     net = model.net;
     % Get classnames of COCO dataset.
     classNames = helper.getCOCOClassNames;
