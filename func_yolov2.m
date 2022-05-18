@@ -1,7 +1,7 @@
 function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
         classcombinedFailureRateMR1MR2, classcompositeMRFailureRate, ...
-        tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(dataset, followup1, followup2, net, anchors, classNames, executionEnvironment)
+        tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(dataset, followup1, followup2, detector)
    % Get all images from current dataset directory
     filePattern = fullfile(dataset, '*.jpg');
     theFiles = dir(filePattern);     
@@ -11,14 +11,14 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
     for j = 1 : length(theFiles) % loop through images in dataset
         % Get source image
         sourceTestcase = imread(fullfile(theFiles(j).folder, theFiles(j).name));
-        % Execute source testcase
-        [bboxes, scores, labels] = detectYOLOv4(net, sourceTestcase, anchors, classNames, executionEnvironment);
+        % Execute source testcase        
+        [boxes, scores, labels] = detect(detector, sourceTestcase);
         % store source testcase results
         source_labels = labels;
         source_noOfObjs = length(source_labels);
         % generate followup testcase
-        followUpTestcase = followup1(sourceTestcase);       
-        [bboxes, scores, labels] = detectYOLOv4(net, followUpTestcase, anchors, classNames, executionEnvironment);                                
+        followUpTestcase = followup1(sourceTestcase);
+        [boxes, scores, labels] = detect(detector, followUpTestcase);
         numOfValidTests = numOfValidTests + 1;        
         fobjs = length(labels);
 
@@ -71,13 +71,13 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         % Get source image
         sourceTestcase = imread(fullfile(theFiles(j).folder, theFiles(j).name));
         % Execute source testcase
-        [bboxes, scores, labels] = detectYOLOv4(net, sourceTestcase, anchors, classNames, executionEnvironment);                        
+        [boxes, scores, labels] = detect(detector, sourceTestcase);
         % store source testcase results
         source_labels = labels;
         source_noOfObjs = length(source_labels);
         % generate followup testcase
         followUpTestcase = followup2(sourceTestcase);       
-        [bboxes, scores, labels] = detectYOLOv4(net, followUpTestcase, anchors, classNames, executionEnvironment);                                
+        [boxes, scores, labels] = detect(detector, followUpTestcase);
         numOfValidTests1 = numOfValidTests1 + 1;        
         fobjs = length(labels);
 
@@ -140,13 +140,13 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         % Get source image
         sourceTestcase = imread(fullfile(theFiles(j).folder, theFiles(j).name));
         % Execute source testcase
-        [bboxes, scores, labels] = detectYOLOv4(net, sourceTestcase, anchors, classNames, executionEnvironment);                        
+        [boxes, scores, labels] = detect(detector, sourceTestcase);
         % store source testcase results
         source_labels = labels;
         source_noOfObjs = length(source_labels);
         % generate composite testcase
         compositeTestcase = followup2(followup1(sourceTestcase));
-        [bboxes, scores, labels] = detectYOLOv4(net, compositeTestcase, anchors, classNames, executionEnvironment);                                
+        [boxes, scores, labels] = detect(detector, compositeTestcase);
         numOfValidTests = numOfValidTests + 1;        
         fobjs = length(labels);
 
