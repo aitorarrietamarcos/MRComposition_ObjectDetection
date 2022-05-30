@@ -5,8 +5,8 @@
 clear;
 clc;
 
-modelNames = {'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'};
-% modelNames = {'YOLOv4-coco'};
+%modelNames = {'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'};
+modelNames = {'YOLOv4-coco'};
 % datasets = {'datasets/coco/subset1','datasets/coco/subset2','datasets/coco/subset3','datasets/coco/subset4'};    % list of datasets
 datasets = {'datasets/coco/subset1'};
 results_dir = 'results';                % results dir
@@ -69,6 +69,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR1\n')
                 % 1
                 for k=1:noOfExecutions
+                    fprintf('Composite MR1 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -93,6 +94,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR2\n')
                 % 2
                 for k=1:noOfExecutions
+                    fprintf('Composite MR2 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -117,6 +119,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR3\n')
                 % 3
                 for k=1:noOfExecutions
+                    fprintf('Composite MR3 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -141,6 +144,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR4\n')
                 % 4
                 for k=1:noOfExecutions
+                    fprintf('Composite MR4 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -165,6 +169,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR5\n')
                 % 5
                 for k=1:noOfExecutions
+                    fprintf('Composite MR5 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -189,6 +194,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR6\n')
                 % 6
                 for k=1:noOfExecutions
+                    fprintf('Composite MR6 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -213,6 +219,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR7\n')
                 % 7
                 for k=1:noOfExecutions
+                    fprintf('Composite MR7 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -237,6 +244,7 @@ for i = 1 : length(modelNames)
                 fprintf('composite MR8\n')
                 % 8
                 for k=1:noOfExecutions
+                    fprintf('Composite MR8 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -259,8 +267,9 @@ for i = 1 : length(modelNames)
                 xlswrite(results_file, expResults);
                 
                 fprintf('composite MR9\n')
-                % 8
+                % 9
                 for k=1:noOfExecutions
+                    fprintf('Composite MR9 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -283,8 +292,9 @@ for i = 1 : length(modelNames)
                 xlswrite(results_file, expResults);
                 
                 fprintf('composite MR10\n')
-                % 9
+                % 10
                 for k=1:noOfExecutions
+                    fprintf('Composite MR10 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
@@ -307,8 +317,9 @@ for i = 1 : length(modelNames)
                 xlswrite(results_file, expResults);  
                 
                 fprintf('composite MR11\n')
-                % 10
+                % 11
                 for k=1:noOfExecutions
+                    fprintf('Composite MR11 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...

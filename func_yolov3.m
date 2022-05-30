@@ -2,7 +2,12 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
         classcombinedFailureRateMR1MR2, classcompositeMRFailureRate, ...
         tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(dataset, followup1, followup2, detector)
-   % Get all images from current dataset directory
+       % check directory validity
+    if ~exist(dataset, 'dir')
+       fprintf('invalid dataset directory')
+       return;
+    end
+    % Get all images from current dataset directory
     filePattern = fullfile(dataset, '*.jpg');
     theFiles = dir(filePattern);     
     %% Execute MR1
@@ -26,10 +31,8 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         fobjs = length(labels);
 
         % Object detection score
-        if fobjs > 0
-            % detected at least 1 object, 
-            % fobjs/source_noOfObjs = success rate so failure is 1 - fobjs/source_noOfObjs
-            objDetectionFailuresMR1(numOfValidTests, 1) = (1 - fobjs/source_noOfObjs);
+        if fobjs == source_noOfObjs
+            objDetectionFailuresMR1(numOfValidTests, 1) = 0;
         else
             % detected nothing
             objDetectionFailuresMR1(numOfValidTests, 1) =  1;
@@ -49,9 +52,9 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     end
                 end
             end
-            if correct > 0
-                % correctly classified some objects
-                objClassificationFailuresMR1(numOfValidTests, 1) = 1 - (correct/source_noOfObjs);
+            if correct == source_noOfObjs
+                % correctly classified all objects
+                objClassificationFailuresMR1(numOfValidTests, 1) = 0;
             else
                 % failure rate is 1
                 objClassificationFailuresMR1(numOfValidTests, 1) =  1;
@@ -85,10 +88,8 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         fobjs = length(labels);
 
         % Object detection score
-        if fobjs > 0
-            % detected at least 1 object, 
-            % fobjs/source_noOfObjs = success rate so failure is 1 - fobjs/source_noOfObjs
-            objDetectionFailuresMR2(numOfValidTests1, 1) = (1 - fobjs/source_noOfObjs);
+        if fobjs == source_noOfObjs
+            objDetectionFailuresMR2(numOfValidTests1, 1) = 0;
         else
             % detected nothing
             objDetectionFailuresMR2(numOfValidTests1, 1) =  1;
@@ -108,9 +109,8 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     end
                 end
             end
-            if correct > 0
-                % correctly classified some objects
-                objClassificationFailuresMR2(numOfValidTests1, 1) = 1 - (correct/source_noOfObjs);
+            if correct == source_noOfObjs
+                objClassificationFailuresMR2(numOfValidTests1, 1) = 0;
             else
                 % failure rate is 1
                 objClassificationFailuresMR2(numOfValidTests1, 1) =  1;
@@ -154,10 +154,8 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
         fobjs = length(labels);
 
         % Object detection score
-        if fobjs > 0
-            % detected at least 1 object, 
-            % fobjs/source_noOfObjs = success rate so failure is 1 - fobjs/source_noOfObjs
-            objDetectionCompositeFailures(numOfValidTests, 1) = (1 - fobjs/source_noOfObjs);
+        if fobjs == source_noOfObjs
+            objDetectionCompositeFailures(numOfValidTests, 1) = 0;
         else
             % detected nothing
             objDetectionCompositeFailures(numOfValidTests, 1) =  1;
@@ -177,9 +175,8 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
                     end
                 end
             end
-            if correct > 0
-                % correctly classified some objects
-                objClassificationCompositeFailures(numOfValidTests, 1) = 1 - (correct/source_noOfObjs);
+            if correct == source_noOfObjs
+                objClassificationCompositeFailures(numOfValidTests, 1) = 0;
             else
                 % failure rate is 1
                 objClassificationCompositeFailures(numOfValidTests, 1) =  1;
