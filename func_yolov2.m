@@ -127,11 +127,25 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
     tMR12 = tMR1+tMR2;
 
     %% obtain objDetectionFailures statistics combined
-    objcombinedFailureRateMR1MR2 = (sum(objClassificationFailuresMR2) + sum(objDetectionFailuresMR2)) / (numOfValidTests + numOfValidTests1);
+    % objcombinedFailureRateMR1MR2 = (sum(objDetectionFailuresMR1) + sum(objDetectionFailuresMR2)) / (numOfValidTests + numOfValidTests1);
+    objfailuresCombined = 0;
+    for k=1:length(objDetectionFailuresMR1)
+        if objDetectionFailuresMR1(k,1)==1||objDetectionFailuresMR2(k,1)==1
+            objfailuresCombined = objfailuresCombined+1;
+        end
+    end
+    objcombinedFailureRateMR1MR2 = objfailuresCombined/numOfValidTests;
     
     %% obtain objClassificationFailures statistics combined
-    classcombinedFailureRateMR1MR2 = (sum(objClassificationFailuresMR2) + sum(objDetectionFailuresMR2)) / (numOfValidTests + numOfValidTests1);
-  
+    % classcombinedFailureRateMR1MR2 = (sum(objClassificationFailuresMR1) + sum(objClassificationFailuresMR2)) / (numOfValidTests + numOfValidTests1);
+      classfailuresCombined = 0;
+    for k=1:length(objClassificationFailuresMR1)
+        if objClassificationFailuresMR1(k,1)==1||objClassificationFailuresMR2(k,1)==1
+            classfailuresCombined = classfailuresCombined+1;
+        end
+    end
+    classcombinedFailureRateMR1MR2 = classfailuresCombined/numOfValidTests;
+    
     %% Composite MR (MR1+MR2)
     numOfValidTests = 0;    
     tic;
