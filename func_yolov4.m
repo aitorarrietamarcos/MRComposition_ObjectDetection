@@ -1,7 +1,7 @@
-function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
-        objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
-        classcombinedFailureRateMR1MR2, classcompositeMRFailureRate, ...
-        tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(dataset, followup1, followup2, net, anchors, classNames, executionEnvironment)    
+function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+    classcompositeMRFailureRate, ...
+    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(dataset, followup1, followup2, net, anchors, classNames, executionEnvironment)
     % check directory validity
     if ~exist(dataset, 'dir')
        fprintf('invalid dataset directory')
@@ -9,7 +9,7 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
     end
     % Get all images from current dataset directory
     filePattern = fullfile(dataset, '*.jpg');
-    theFiles = dir(filePattern);     
+    theFiles = dir(filePattern);
     %% Execute MR1
     numOfValidTests = 0;    
     tic;
@@ -141,7 +141,7 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
     
     %% obtain objClassificationFailures statistics combined
     % classcombinedFailureRateMR1MR2 = (sum(objClassificationFailuresMR1) + sum(objClassificationFailuresMR2)) / (numOfValidTests + numOfValidTests1);
-      classfailuresCombined = 0;
+    classfailuresCombined = 0;
     for k=1:length(objClassificationFailuresMR1)
         if objClassificationFailuresMR1(k,1)==1||objClassificationFailuresMR2(k,1)==1
             classfailuresCombined = classfailuresCombined+1;
@@ -168,9 +168,7 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
 
         % Object detection score
         if fobjs == source_noOfObjs
-            % detected at least 1 object, 
-            % fobjs/source_noOfObjs = success rate so failure is 1 - fobjs/source_noOfObjs
-            objDetectionCompositeFailures(numOfValidTests, 1) = (1 - fobjs/source_noOfObjs);
+            objDetectionCompositeFailures(numOfValidTests, 1) = 0;
         else
             % detected nothing
             objDetectionCompositeFailures(numOfValidTests, 1) =  1;
@@ -192,7 +190,7 @@ function [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
             end
             if correct == source_noOfObjs
                 % correctly classified some objects
-                objClassificationCompositeFailures(numOfValidTests, 1) = 1 - (correct/source_noOfObjs);
+                objClassificationCompositeFailures(numOfValidTests, 1) = 0;
             else
                 % failure rate is 1
                 objClassificationCompositeFailures(numOfValidTests, 1) =  1;
