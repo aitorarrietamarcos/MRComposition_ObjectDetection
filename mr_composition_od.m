@@ -5,10 +5,11 @@
 clear;
 clc;
 
-%modelNames = {'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'};
-modelNames = {'YOLOv4-coco'};
-%datasets = {'datasets/oid/oidperson','datasets/oid/oidvehicle','datasets/oid/oidanimal','datasets/oid/oidfood','datasets/oid/oidfurniture','datasets/coco/cocoperson','datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture'};    % list of datasets
-datasets = {'datasets/coco/subset1'};
+modelNames = {'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'};
+%modelNames = {'YOLOv4-coco'};
+datasets = {'datasets/oid/oidvehicle','datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture','datasets/coco/cocoperson', ...
+    'datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture'};    % list of datasets
+%datasets = {'datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture'};
 results_dir = 'results';                % results dir
 noOfExecutions = 1;
 % create results dir if not existing
@@ -33,7 +34,6 @@ for i = 1 : length(modelNames)
             if ~exist(model_results_dir, 'dir')
                mkdir(model_results_dir);
             end
-            
             % load model    
             model = helper.downloadPretrainedYOLOv4(modelNames{i});
             net = model.net;
@@ -46,8 +46,7 @@ for i = 1 : length(modelNames)
             for j = 1 : length(datasets)
                 % create results file
                 subset = split(datasets{j}, "/" );
-                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',subset(length(subset)) , '_',string(j),'.xlsx')) ;
-                
+                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
                 it = 1;
                 expResults{1,1} = 'MR1';
                 expResults{1,2} = 'MR2';
@@ -70,7 +69,7 @@ for i = 1 : length(modelNames)
                 expResults{1,19} = 'timeMR2';
                 expResults{1,20} = 'timeMR12';
                 expResults{1,21} = 'timeMR12_composite';
-                
+
                 fprintf('composite MR1\n')
                 % 1
                 for k=1:noOfExecutions
@@ -482,10 +481,10 @@ for i = 1 : length(modelNames)
             % Perform detection using pretrained model.
             executionEnvironment = 'auto';
             
-            for j = 1 : length(datasets)                
+            for j = 1 : length(datasets)
                 % create results file
                 subset = split(datasets{j}, "/" );
-                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',subset(length(subset)) , '_',string(j),'.xlsx')) ;
+                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
                 
                 it = 1;
                 expResults{1,1} = 'MR1';
@@ -918,7 +917,7 @@ for i = 1 : length(modelNames)
 
             for j = 1 : length(datasets)
                 subset = split(datasets{j}, "/" );
-                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',subset(length(subset)) , '_',string(j),'.xlsx')) ;
+                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
 
                 it = 1;
                 expResults{1,1} = 'MR1';
@@ -1338,7 +1337,7 @@ for i = 1 : length(modelNames)
             detector = yolov3ObjectDetector(modelNames{i});
             for j = 1 : length(datasets)
                 subset = split(datasets{j}, "/" );
-                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',subset(length(subset)) , '_',string(j),'.xlsx')) ;
+                results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
 
                 it = 1;
                 expResults{1,1} = 'MR1';
