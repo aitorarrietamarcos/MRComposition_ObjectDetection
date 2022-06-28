@@ -16,71 +16,76 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
     numOfValidTests = 0;    
     tic;
     for j = 1 : length(theFiles) % loop through images in dataset
-        % Get and preprocess source image
-        image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
-        [rows, columns, numberOfColorChannels] = size(image);
-        if numberOfColorChannels > 1 % filters out greyscale images           
-            % Execute source testcase
-            sourceTestcase = preprocess(detector,image);
-            sourceTestcase = im2single(sourceTestcase);
-            [bboxes,scores,labels] = detect(detector,sourceTestcase,'DetectionPreprocessing','none');
-            % store source testcase results
-            source_labels = labels;
-            source_noOfObjs = length(source_labels);
+        try
+            % Get and preprocess source image
+            image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
+            [rows, columns, numberOfColorChannels] = size(image);
+            if numberOfColorChannels > 1 % filters out greyscale images
+                % Execute source testcase
+                %sourceTestcase = preprocess(detector,image);
+                %sourceTestcase = im2single(image);            
+                [bboxes,scores,labels] = detect(detector, image,'DetectionPreprocessing','auto');
+                % store source testcase results
+                source_labels = labels;
+                source_noOfObjs = length(source_labels);
 
-            % generate followup testcase
-            followUpTestcase = followup1(image);     
-            % Execute source testcase
-            followUpTestcase = preprocess(detector,followUpTestcase);
-            followUpTestcase = im2single(followUpTestcase);        
-            [bboxes,scores,labels] = detect(detector,followUpTestcase,'DetectionPreprocessing','none');
+                % generate followup testcase
+                followUpTestcase = followup1(image);
+                %followUpTestcase = preprocess(detector,followUpTestcase);
+                %followUpTestcase = im2single(followUpTestcase);
+                % Execute followup testcase
+                [bboxes,scores,labels] = detect(detector,followUpTestcase,'DetectionPreprocessing','auto');
 
-            numOfValidTests = numOfValidTests + 1;        
-            fobjs = length(labels);
+                numOfValidTests = numOfValidTests + 1;        
+                fobjs = length(labels);
 
-            % Object detection score
-            if fobjs == source_noOfObjs
-                objDetectionFailuresMR1(numOfValidTests, 1) = 0;
-            else
-                % detected nothing
-                objDetectionFailuresMR1(numOfValidTests, 1) =  1;
-            end
+                % Object detection score
+                if fobjs == source_noOfObjs
+                    objDetectionFailuresMR1(numOfValidTests, 1) = 0;
+                else
+                    % detected nothing
+                    objDetectionFailuresMR1(numOfValidTests, 1) =  1;
+                end
 
-            % calculate classification score
-            if fobjs > 0
-                temp_source_labels = source_labels;
-                correct = 0;
-                % correct number of objects id'd
-                for l = 1: fobjs
-                    for m = 1: length(temp_source_labels)
-                        if labels(l) == temp_source_labels(m) % if element exists in temp
-                            correct = correct + 1; % increment
-                            temp_source_labels(m) = ""; % remove element
-                            break
+                % calculate classification score
+                if fobjs > 0
+                    temp_source_labels = source_labels;
+                    correct = 0;
+                    % correct number of objects id'd
+                    for l = 1: fobjs
+                        for m = 1: length(temp_source_labels)
+                            if labels(l) == temp_source_labels(m) % if element exists in temp
+                                correct = correct + 1; % increment
+                                temp_source_labels(m) = ""; % remove element
+                                break
+                            end
                         end
                     end
-                end
-                if correct == source_noOfObjs
-                    % correctly classified all objects
-                    objClassificationFailuresMR1(numOfValidTests, 1) = 0;
+                    if correct == source_noOfObjs
+                        % correctly classified all objects
+                        objClassificationFailuresMR1(numOfValidTests, 1) = 0;
+                    else
+                        % failure rate is 1
+                        objClassificationFailuresMR1(numOfValidTests, 1) =  1;
+                    end                
                 else
                     % failure rate is 1
                     objClassificationFailuresMR1(numOfValidTests, 1) =  1;
-                end                
-            else
-                % failure rate is 1
-                objClassificationFailuresMR1(numOfValidTests, 1) =  1;
+                end
+
+                %get combined failure rate for object detection and classification
+                %failures
+                if objDetectionFailuresMR1(numOfValidTests, 1) == 1 && objClassificationFailuresMR1(numOfValidTests, 1) == 1 
+                % combined is 1
+                    objClassDectectFailuresMR1(numOfValidTests, 1) =  1;
+                else
+                % combined failure rate is 0
+                    objClassDectectFailuresMR1(numOfValidTests, 1) =  0;
+                end
+
             end
-            
-            %get combined failure rate for object detection and classification
-            %failures
-            if objDetectionFailuresMR1(numOfValidTests, 1) == 1 && objClassificationFailuresMR1(numOfValidTests, 1) == 1 
-            % combined is 1
-                objClassDectectFailuresMR1(numOfValidTests, 1) =  1;
-            else
-            % combined failure rate is 0
-                objClassDectectFailuresMR1(numOfValidTests, 1) =  0;
-            end
+        catch
+            fprintf('mr1 Image %s skipped \n', fullfile(theFiles(j).folder, theFiles(j).name));
         end
     end
     tMR1 = toc;
@@ -93,68 +98,72 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
     numOfValidTests1 = 0;    
     tic;
     for j = 1 : length(theFiles) % loop through images in dataset
-        % Get source image
-        image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
-        [rows, columns, numberOfColorChannels] = size(image);
-        if numberOfColorChannels > 1 % filters out greyscale images    
-            % Execute source testcase
-            sourceTestcase = preprocess(detector,image);
-            sourceTestcase = im2single(sourceTestcase);
-            [bboxes,scores,labels] = detect(detector,sourceTestcase,'DetectionPreprocessing','none');
-            % store source testcase results
-            source_labels = labels;
-            source_noOfObjs = length(source_labels);
+        try
+            % Get source image
+            image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
+            [rows, columns, numberOfColorChannels] = size(image);
+            if numberOfColorChannels > 1 % filters out greyscale images
+                % Execute source testcase
+                %sourceTestcase = preprocess(detector,image);
+                %sourceTestcase = im2single(image);
+                [bboxes,scores,labels] = detect(detector,image,'DetectionPreprocessing','auto');
+                % store source testcase results
+                source_labels = labels;
+                source_noOfObjs = length(source_labels);
 
-            % generate followup testcase
-            followUpTestcase = followup2(image);
-            followUpTestcase = preprocess(detector,followUpTestcase);
-            followUpTestcase = im2single(followUpTestcase); 
-            [bboxes,scores,labels] = detect(detector,followUpTestcase,'DetectionPreprocessing','none');
-            numOfValidTests1 = numOfValidTests1 + 1;        
-            fobjs = length(labels);
+                % generate followup testcase
+                followUpTestcase = followup2(image);
+                %followUpTestcase = preprocess(detector,followUpTestcase);
+                %followUpTestcase = im2single(followUpTestcase);
+                [bboxes,scores,labels] = detect(detector, followUpTestcase, 'DetectionPreprocessing','auto');
+                numOfValidTests1 = numOfValidTests1 + 1;        
+                fobjs = length(labels);
 
-            % Object detection score
-            if fobjs == source_noOfObjs
-                objDetectionFailuresMR2(numOfValidTests1, 1) = 0;
-            else
-                % detected nothing
-                objDetectionFailuresMR2(numOfValidTests1, 1) =  1;
-            end
+                % Object detection score
+                if fobjs == source_noOfObjs
+                    objDetectionFailuresMR2(numOfValidTests1, 1) = 0;
+                else
+                    % detected nothing
+                    objDetectionFailuresMR2(numOfValidTests1, 1) =  1;
+                end
 
-            % calculate classification score
-            if fobjs > 0
-                temp_source_labels = source_labels;
-                correct = 0;
-                % correct number of objects id'd
-                for l = 1: fobjs
-                    for m = 1: length(temp_source_labels)
-                        if labels(l) == temp_source_labels(m) % if element exists in temp
-                            correct = correct + 1; % increment
-                            temp_source_labels(m) = ""; % remove element
-                            break
+                % calculate classification score
+                if fobjs > 0
+                    temp_source_labels = source_labels;
+                    correct = 0;
+                    % correct number of objects id'd
+                    for l = 1: fobjs
+                        for m = 1: length(temp_source_labels)
+                            if labels(l) == temp_source_labels(m) % if element exists in temp
+                                correct = correct + 1; % increment
+                                temp_source_labels(m) = ""; % remove element
+                                break
+                            end
                         end
                     end
-                end
-                if correct == source_noOfObjs
-                    objClassificationFailuresMR2(numOfValidTests1, 1) = 0;
+                    if correct == source_noOfObjs
+                        objClassificationFailuresMR2(numOfValidTests1, 1) = 0;
+                    else
+                        % failure rate is 1
+                        objClassificationFailuresMR2(numOfValidTests1, 1) =  1;
+                    end                
                 else
                     % failure rate is 1
                     objClassificationFailuresMR2(numOfValidTests1, 1) =  1;
-                end                
-            else
-                % failure rate is 1
-                objClassificationFailuresMR2(numOfValidTests1, 1) =  1;
+                end
+
+                %get combined failure rate for object detection and classification
+                %failures
+                if objDetectionFailuresMR2(numOfValidTests1, 1) == 1 && objClassificationFailuresMR2(numOfValidTests1, 1) == 1 
+                % combined is 1
+                    objClassDectectFailuresMR2(numOfValidTests1, 1) =  1;
+                else
+                % combined failure rate is 0
+                    objClassDectectFailuresMR2(numOfValidTests1, 1) =  0;
+                end            
             end
-            
-            %get combined failure rate for object detection and classification
-            %failures
-            if objDetectionFailuresMR2(numOfValidTests1, 1) == 1 && objClassificationFailuresMR2(numOfValidTests1, 1) == 1 
-            % combined is 1
-                objClassDectectFailuresMR2(numOfValidTests1, 1) =  1;
-            else
-            % combined failure rate is 0
-                objClassDectectFailuresMR2(numOfValidTests1, 1) =  0;
-            end            
+        catch
+            fprintf('mr2 Image %s skipped \n', fullfile(theFiles(j).folder, theFiles(j).name));
         end
     end
     tMR2 = toc;
@@ -205,70 +214,72 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
     numOfValidTests = 0;    
     tic;
     for j = 1 : length(theFiles) % loop through images in dataset
-        % Get source image
-        image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
-        [rows, columns, numberOfColorChannels] = size(image);
-        if numberOfColorChannels > 1 % filters out greyscale images 
-            sourceTestcase = preprocess(detector,image);
-            sourceTestcase = im2single(sourceTestcase); 
+        try
+            % Get source image
+            image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
+            [rows, columns, numberOfColorChannels] = size(image);
+            if numberOfColorChannels > 1 % filters out greyscale images 
+                %sourceTestcase = preprocess(detector,image);
+                %sourceTestcase = im2single(sourceTestcase); 
+                [bboxes,scores,labels] = detect(detector,image,'DetectionPreprocessing','auto');
+                % store source testcase results
+                source_labels = labels;
+                source_noOfObjs = length(source_labels);
 
-            [bboxes,scores,labels] = detect(detector,sourceTestcase,'DetectionPreprocessing','none');
-            % store source testcase results
-            source_labels = labels;
-            source_noOfObjs = length(source_labels);
+                % generate composite testcase
+                compositeTestcase = followup2(followup1(image));
+                %compositeTestcase = preprocess(detector,compositeTestcase);
+                %compositeTestcase = im2single(compositeTestcase);                
+                [bboxes,scores,labels] = detect(detector,compositeTestcase,'DetectionPreprocessing','auto');
+                numOfValidTests = numOfValidTests + 1;        
+                fobjs = length(labels);
 
-            % generate composite testcase
-            compositeTestcase = followup2(followup1(image));        
-            compositeTestcase = preprocess(detector,compositeTestcase);
-            compositeTestcase = im2single(compositeTestcase); 
+                % Object detection score
+                if fobjs == source_noOfObjs
+                    objDetectionCompositeFailures(numOfValidTests, 1) = 0;
+                else
+                    % detected nothing
+                    objDetectionCompositeFailures(numOfValidTests, 1) =  1;
+                end
 
-            [bboxes,scores,labels] = detect(detector,compositeTestcase,'DetectionPreprocessing','none');
-            numOfValidTests = numOfValidTests + 1;        
-            fobjs = length(labels);
-
-            % Object detection score
-            if fobjs == source_noOfObjs
-                objDetectionCompositeFailures(numOfValidTests, 1) = 0;
-            else
-                % detected nothing
-                objDetectionCompositeFailures(numOfValidTests, 1) =  1;
-            end
-
-            % calculate classification score
-            if fobjs > 0
-                temp_source_labels = source_labels;
-                correct = 0;
-                % correct number of objects id'd
-                for l = 1: fobjs
-                    for m = 1: length(temp_source_labels)
-                        if labels(l) == temp_source_labels(m) % if element exists in temp
-                            correct = correct + 1; % increment
-                            temp_source_labels(m) = ""; % remove element
-                            break
+                % calculate classification score
+                if fobjs > 0
+                    temp_source_labels = source_labels;
+                    correct = 0;
+                    % correct number of objects id'd
+                    for l = 1: fobjs
+                        for m = 1: length(temp_source_labels)
+                            if labels(l) == temp_source_labels(m) % if element exists in temp
+                                correct = correct + 1; % increment
+                                temp_source_labels(m) = ""; % remove element
+                                break
+                            end
                         end
                     end
-                end
-                if correct == source_noOfObjs
-                    objClassificationCompositeFailures(numOfValidTests, 1) = 0;
+                    if correct == source_noOfObjs
+                        objClassificationCompositeFailures(numOfValidTests, 1) = 0;
+                    else
+                        % failure rate is 1
+                        objClassificationCompositeFailures(numOfValidTests, 1) =  1;
+                    end                
                 else
                     % failure rate is 1
                     objClassificationCompositeFailures(numOfValidTests, 1) =  1;
-                end                
-            else
-                % failure rate is 1
-                objClassificationCompositeFailures(numOfValidTests, 1) =  1;
+                end
+
+                %get combined failure rate for object detection and classification
+                %failures
+                if objDetectionCompositeFailures(numOfValidTests, 1) == 1 && objClassificationCompositeFailures(numOfValidTests, 1) == 1 
+                % combined is 1
+                    objClassDectectFailuresMR12(numOfValidTests, 1) =  1;
+                else
+                % combined failure rate is 0
+                    objClassDectectFailuresMR12(numOfValidTests, 1) =  0;
+                end
             end
-            
-            %get combined failure rate for object detection and classification
-            %failures
-            if objDetectionCompositeFailures(numOfValidTests, 1) == 1 && objClassificationCompositeFailures(numOfValidTests, 1) == 1 
-            % combined is 1
-                objClassDectectFailuresMR12(numOfValidTests, 1) =  1;
-            else
-            % combined failure rate is 0
-                objClassDectectFailuresMR12(numOfValidTests, 1) =  0;
-            end
-        end
+        catch
+            fprintf('composite Image %s skipped \n', fullfile(theFiles(j).folder, theFiles(j).name));
+        end        
     end
     tCompositeMR = toc;
     

@@ -6,11 +6,10 @@ clear;
 clc;
 
 modelNames = {'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'};
-%modelNames = {'YOLOv4-coco'};
+%modelNames = {'tiny-yolov3-coco'};
 datasets = {'datasets/oid/oidvehicle','datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture','datasets/coco/cocoperson', ...
-    'datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture'};    % list of datasets
-%datasets = {'datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture'};
-results_dir = 'results';                % results dir
+    'datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture','datasets/oid/oidperson'};    % list of datasets
+results_dir = 'results';                % results d ir
 noOfExecutions = 1;
 % create results dir if not existing
 if ~exist(results_dir, 'dir')
@@ -47,6 +46,7 @@ for i = 1 : length(modelNames)
                 % create results file
                 subset = split(datasets{j}, "/" );
                 results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
+                fprintf('Dataset: %s\n', string(subset(length(subset))));
                 it = 1;
                 expResults{1,1} = 'MR1';
                 expResults{1,2} = 'MR2';
@@ -454,6 +454,287 @@ for i = 1 : length(modelNames)
                     expResults{it,21} = tCompositeMR;
                 end
                 xlswrite(results_file, expResults);
+
+                fprintf('composite MR12\n')
+                % 12
+                for k=1:noOfExecutions
+                    fprintf('Composite MR12 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.flip_left_right, @MRs.blur_image, net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'flipLeftRight';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR13\n')
+                % 13
+                for k=1:noOfExecutions
+                    fprintf('Composite MR13 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.flip_up_down, @MRs.blur_image, net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'flipUpDown';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR14\n')
+                % 14
+                for k=1:noOfExecutions
+                    fprintf('Composite MR14 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.rotate_image5m, @MRs.blur_image, net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotateMinus5deg';
+                    expResults{it,2} = 'blur_image';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR15\n')
+                % 15
+                for k=1:noOfExecutions
+                    fprintf('Composite MR15 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20m, net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearMinus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+
+                fprintf('composite MR16\n')
+                % 16
+                for k=1:noOfExecutions
+                    fprintf('Composite MR16 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20p, net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearPlus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR17\n')
+                % 17
+                for k=1:noOfExecutions
+                    fprintf('Composite MR17 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.rotate_image5p, @MRs.blur_image, net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR18\n')
+                % 18
+                for k=1:noOfExecutions
+                    fprintf('Composite MR18 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.shear_image20m,@MRs.blur_image,  net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'shearMinus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR19\n')
+                % 19
+                for k=1:noOfExecutions
+                    fprintf('Composite MR19 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov4(datasets{j},@MRs.shear_image20p,@MRs.blur_image,  net, anchors, classNames, executionEnvironment);
+                    expResults{it,1} = 'shearPlus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);    
+                
             end
             rmpath('models/pretrained-yolo-v4-main/src');
             rmpath('models/pretrained-yolo-v4-main');  
@@ -485,7 +766,7 @@ for i = 1 : length(modelNames)
                 % create results file
                 subset = split(datasets{j}, "/" );
                 results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
-                
+                fprintf('Dataset: %s\n', string(subset(length(subset))));
                 it = 1;
                 expResults{1,1} = 'MR1';
                 expResults{1,2} = 'MR2';
@@ -892,7 +1173,287 @@ for i = 1 : length(modelNames)
                     expResults{it,20} = tMR12;
                     expResults{it,21} = tCompositeMR;
                 end
-                xlswrite(results_file, expResults);                
+                xlswrite(results_file, expResults);    
+                
+                fprintf('composite MR12\n')
+                % 12
+                for k=1:noOfExecutions
+                    fprintf('Composite MR12 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.flip_left_right, @MRs.blur_image, net, classNames, executionEnvironment);
+                    expResults{it,1} = 'flipLeftRight';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR13\n')
+                % 13
+                for k=1:noOfExecutions
+                    fprintf('Composite MR13 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.flip_up_down, @MRs.blur_image, net, classNames, executionEnvironment);
+                    expResults{it,1} = 'flipUpDown';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR14\n')
+                % 14
+                for k=1:noOfExecutions
+                    fprintf('Composite MR14 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.rotate_image5m, @MRs.blur_image, net, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotateMinus5deg';
+                    expResults{it,2} = 'blur_image';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR15\n')
+                % 15
+                for k=1:noOfExecutions
+                    fprintf('Composite MR15 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20m, net, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearMinus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+
+                fprintf('composite MR16\n')
+                % 16
+                for k=1:noOfExecutions
+                    fprintf('Composite MR16 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20p, net, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearPlus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR17\n')
+                % 17
+                for k=1:noOfExecutions
+                    fprintf('Composite MR17 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.rotate_image5p, @MRs.blur_image, net, classNames, executionEnvironment);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR18\n')
+                % 18
+                for k=1:noOfExecutions
+                    fprintf('Composite MR18 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.shear_image20m,@MRs.blur_image,  net, classNames, executionEnvironment);
+                    expResults{it,1} = 'shearMinus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR19\n')
+                % 19
+                for k=1:noOfExecutions
+                    fprintf('Composite MR19 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_efficientdetd0(datasets{j},@MRs.shear_image20p,@MRs.blur_image,  net, classNames, executionEnvironment);
+                    expResults{it,1} = 'shearPlus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);                    
             end
             rmpath('models/pretrained-efficientdet-d0-main/src');
             rmpath('models/pretrained-efficientdet-d0-main');
@@ -918,7 +1479,7 @@ for i = 1 : length(modelNames)
             for j = 1 : length(datasets)
                 subset = split(datasets{j}, "/" );
                 results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
-
+                fprintf('Dataset: %s\n', string(subset(length(subset))));
                 it = 1;
                 expResults{1,1} = 'MR1';
                 expResults{1,2} = 'MR2';
@@ -942,128 +1503,407 @@ for i = 1 : length(modelNames)
                 expResults{1,20} = 'timeMR12';
                 expResults{1,21} = 'timeMR12_composite';
                 
-                fprintf('composite MR1\n')
-                % 1
-                for k=1:noOfExecutions
-                    fprintf('Composite MR1 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.flip_up_down, detector);
-                    expResults{it,1} = 'flipLeftRight';
-                    expResults{it,2} = 'flipUpDown';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file,expResults);
+%                 fprintf('composite MR1\n')
+%                 % 1
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR1 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.flip_up_down, detector);
+%                     expResults{it,1} = 'flipLeftRight';
+%                     expResults{it,2} = 'flipUpDown';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file,expResults);
+%                 
+%                 fprintf('composite MR2\n')
+%                 % 2
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR2 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.rotate_image5m, detector);
+%                     expResults{it,1} = 'flipLeftRight';
+%                     expResults{it,2} = 'rotateMinus5deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file,expResults);
+%             
+%                 fprintf('composite MR3\n')
+%                 % 3
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR3 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.rotate_image5p, detector);
+%                     expResults{it,1} = 'flipLeftRight';
+%                     expResults{it,2} = 'rotatePlus5deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file,expResults);
+%                 
+%                 fprintf('composite MR4\n')
+%                 % 4
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR4 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.shear_image20m, detector);
+%                     expResults{it,1} = 'flipLeftRight';
+%                     expResults{it,2} = 'shearMinus20deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
+%                 
+%                 fprintf('composite MR5\n')
+%                 % 5
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR5 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.shear_image20p, detector);
+%                     expResults{it,1} = 'flipLeftRight';
+%                     expResults{it,2} = 'shearPlus20deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
+%                 
+%                 fprintf('composite MR6\n')
+%                 % 6
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR6 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.rotate_image5m, detector);
+%                     expResults{it,1} = 'flipUpDown';
+%                     expResults{it,2} = 'rotateMinus5deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
+%                 
+%                 fprintf('composite MR7\n')
+%                 % 7
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR7 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.rotate_image5p, detector);
+%                     expResults{it,1} = 'flipUpDown';
+%                     expResults{it,2} = 'rotatePlus5deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
+%                 
+%                 fprintf('composite MR8\n')
+%                 % 8
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR8 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.shear_image20m, detector);
+%                     expResults{it,1} = 'flipUpDown';
+%                     expResults{it,2} = 'shearMinus20deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
+%                 
+%                 fprintf('composite MR9\n')
+%                 % 8
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR9 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.shear_image20p, detector);
+%                     expResults{it,1} = 'flipUpDown';
+%                     expResults{it,2} = 'shearPlus20deg';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
+%                 
+%                 fprintf('composite MR10\n')
+%                 % 9
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR10 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+%                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+%                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+%                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+%                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5m, @MRs.shear_image20m,  detector);
+%                     expResults{it,1} = 'rotateMinus5deg';
+%                     expResults{it,2} = 'shearMinus20degrees';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);  
+%                 
+%                 fprintf('composite MR11\n')
+%                 % 10
+%                 for k=1:noOfExecutions
+%                     fprintf('Composite MR11 run %d\n', k)
+%                     it = it+1;
+%                     [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
+%                     objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
+%                     classcombinedFailureRateMR1MR2, classcompositeMRFailureRate, ...
+%                     tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5m, @MRs.shear_image20p,  detector);
+%                     expResults{it,1} = 'rotateMinus5deg';
+%                     expResults{it,2} = 'shearPlus20degrees';
+%                     expResults{it,3} = objfailureRateMR1;
+%                     expResults{it,4} = objfailureRateMR2;
+%                     expResults{it,5} = objcombinedFailureRateMR1MR2;
+%                     expResults{it,6} = objcompositeMRFailureRate;
+%                     expResults{it,7} = classfailureRateMR1;
+%                     expResults{it,8} = classfailureRateMR2;
+%                     expResults{it,9} = classcombinedFailureRateMR1MR2;
+%                     expResults{it,10} = classcompositeMRFailureRate;  
+%                     expResults{it,11} = objDetectClassFailureRateMR1;
+%                     expResults{it,12} = objDetectClassFailureRateMR2;
+%                     expResults{it,13} = objDetectClassFailureRateMR1MR2;
+%                     expResults{it,14} = objDetectClassFailureRateMR12;
+%                     expResults{it,15} = odCompositeMRMutationScore;
+%                     expResults{it,16} = ocCompositeMRMutationScore;
+%                     expResults{it,17} = compositeMRMutationScore;
+%                     expResults{it,18} = tMR1;
+%                     expResults{it,19} = tMR2;
+%                     expResults{it,20} = tMR12;
+%                     expResults{it,21} = tCompositeMR;
+%                 end
+%                 xlswrite(results_file, expResults);
                 
-                fprintf('composite MR2\n')
-                % 2
-                for k=1:noOfExecutions
-                    fprintf('Composite MR2 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.rotate_image5m, detector);
-                    expResults{it,1} = 'flipLeftRight';
-                    expResults{it,2} = 'rotateMinus5deg';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file,expResults);
-            
-                fprintf('composite MR3\n')
-                % 3
-                for k=1:noOfExecutions
-                    fprintf('Composite MR3 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.rotate_image5p, detector);
-                    expResults{it,1} = 'flipLeftRight';
-                    expResults{it,2} = 'rotatePlus5deg';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file,expResults);
                 
-                fprintf('composite MR4\n')
-                % 4
+                fprintf('composite MR12\n')
+                % 12
                 for k=1:noOfExecutions
-                    fprintf('Composite MR4 run %d\n', k)
+                    fprintf('Composite MR12 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.shear_image20m, detector);
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.blur_image, detector);
                     expResults{it,1} = 'flipLeftRight';
-                    expResults{it,2} = 'shearMinus20deg';
+                    expResults{it,2} = 'blurImage';
                     expResults{it,3} = objfailureRateMR1;
                     expResults{it,4} = objfailureRateMR2;
                     expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
                     expResults{it,7} = classfailureRateMR1;
                     expResults{it,8} = classfailureRateMR2;
                     expResults{it,9} = classcombinedFailureRateMR1MR2;
@@ -1082,58 +1922,23 @@ for i = 1 : length(modelNames)
                 end
                 xlswrite(results_file, expResults);
                 
-                fprintf('composite MR5\n')
-                % 5
+                fprintf('composite MR13\n')
+                % 13
                 for k=1:noOfExecutions
-                    fprintf('Composite MR5 run %d\n', k)
+                    fprintf('Composite MR13 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_left_right, @MRs.shear_image20p, detector);
-                    expResults{it,1} = 'flipLeftRight';
-                    expResults{it,2} = 'shearPlus20deg';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file, expResults);
-                
-                fprintf('composite MR6\n')
-                % 6
-                for k=1:noOfExecutions
-                    fprintf('Composite MR6 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.rotate_image5m, detector);
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.blur_image, detector);
                     expResults{it,1} = 'flipUpDown';
-                    expResults{it,2} = 'rotateMinus5deg';
+                    expResults{it,2} = 'blurImage';
                     expResults{it,3} = objfailureRateMR1;
                     expResults{it,4} = objfailureRateMR2;
                     expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
                     expResults{it,7} = classfailureRateMR1;
                     expResults{it,8} = classfailureRateMR2;
                     expResults{it,9} = classcombinedFailureRateMR1MR2;
@@ -1152,161 +1957,58 @@ for i = 1 : length(modelNames)
                 end
                 xlswrite(results_file, expResults);
                 
-                fprintf('composite MR7\n')
-                % 7
+                fprintf('composite MR14\n')
+                % 14
                 for k=1:noOfExecutions
-                    fprintf('Composite MR7 run %d\n', k)
+                    fprintf('Composite MR14 run %d\n', k)
                     it = it+1;
                     [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
                     objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
                     classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
                     objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
                     compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.rotate_image5p, detector);
-                    expResults{it,1} = 'flipUpDown';
-                    expResults{it,2} = 'rotatePlus5deg';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file, expResults);
-                
-                fprintf('composite MR8\n')
-                % 8
-                for k=1:noOfExecutions
-                    fprintf('Composite MR8 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.shear_image20m, detector);
-                    expResults{it,1} = 'flipUpDown';
-                    expResults{it,2} = 'shearMinus20deg';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file, expResults);
-                
-                fprintf('composite MR9\n')
-                % 8
-                for k=1:noOfExecutions
-                    fprintf('Composite MR9 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.flip_up_down, @MRs.shear_image20p, detector);
-                    expResults{it,1} = 'flipUpDown';
-                    expResults{it,2} = 'shearPlus20deg';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file, expResults);
-                
-                fprintf('composite MR10\n')
-                % 9
-                for k=1:noOfExecutions
-                    fprintf('Composite MR10 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
-                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
-                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
-                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
-                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5m, @MRs.shear_image20m,  detector);
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5m, @MRs.blur_image, detector);
                     expResults{it,1} = 'rotateMinus5deg';
+                    expResults{it,2} = 'blur_image';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR15\n')
+                % 15
+                for k=1:noOfExecutions
+                    fprintf('Composite MR15 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20m, detector);
+                    expResults{it,1} = 'rotatePlus5deg';
                     expResults{it,2} = 'shearMinus20degrees';
                     expResults{it,3} = objfailureRateMR1;
                     expResults{it,4} = objfailureRateMR2;
                     expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
-                    expResults{it,7} = classfailureRateMR1;
-                    expResults{it,8} = classfailureRateMR2;
-                    expResults{it,9} = classcombinedFailureRateMR1MR2;
-                    expResults{it,10} = classcompositeMRFailureRate;  
-                    expResults{it,11} = objDetectClassFailureRateMR1;
-                    expResults{it,12} = objDetectClassFailureRateMR2;
-                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
-                    expResults{it,14} = objDetectClassFailureRateMR12;
-                    expResults{it,15} = odCompositeMRMutationScore;
-                    expResults{it,16} = ocCompositeMRMutationScore;
-                    expResults{it,17} = compositeMRMutationScore;
-                    expResults{it,18} = tMR1;
-                    expResults{it,19} = tMR2;
-                    expResults{it,20} = tMR12;
-                    expResults{it,21} = tCompositeMR;
-                end
-                xlswrite(results_file, expResults);  
-                
-                fprintf('composite MR11\n')
-                % 10
-                for k=1:noOfExecutions
-                    fprintf('Composite MR11 run %d\n', k)
-                    it = it+1;
-                    [objfailureRateMR1,objfailureRateMR2, objcombinedFailureRateMR1MR2, ...
-                    objcompositeMRFailureRate, classfailureRateMR1, classfailureRateMR2, ...
-                    classcombinedFailureRateMR1MR2, classcompositeMRFailureRate, ...
-                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5m, @MRs.shear_image20p,  detector);
-                    expResults{it,1} = 'rotateMinus5deg';
-                    expResults{it,2} = 'shearPlus20degrees';
-                    expResults{it,3} = objfailureRateMR1;
-                    expResults{it,4} = objfailureRateMR2;
-                    expResults{it,5} = objcombinedFailureRateMR1MR2;
-                    expResults{it,6} = objcompositeMRFailureRate;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
                     expResults{it,7} = classfailureRateMR1;
                     expResults{it,8} = classfailureRateMR2;
                     expResults{it,9} = classcombinedFailureRateMR1MR2;
@@ -1324,6 +2026,146 @@ for i = 1 : length(modelNames)
                     expResults{it,21} = tCompositeMR;
                 end
                 xlswrite(results_file, expResults);
+
+                fprintf('composite MR16\n')
+                % 16
+                for k=1:noOfExecutions
+                    fprintf('Composite MR16 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20p, detector);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearPlus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR17\n')
+                % 17
+                for k=1:noOfExecutions
+                    fprintf('Composite MR17 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.rotate_image5p, @MRs.blur_image, detector);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR18\n')
+                % 18
+                for k=1:noOfExecutions
+                    fprintf('Composite MR18 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.shear_image20m,@MRs.blur_image,  detector);
+                    expResults{it,1} = 'shearMinus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR19\n')
+                % 19
+                for k=1:noOfExecutions
+                    fprintf('Composite MR19 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov2(datasets{j},@MRs.shear_image20p,@MRs.blur_image, detector);
+                    expResults{it,1} = 'shearPlus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);                    
             end
             rmpath('models/yolo-v2-main/src');
             
@@ -1338,7 +2180,7 @@ for i = 1 : length(modelNames)
             for j = 1 : length(datasets)
                 subset = split(datasets{j}, "/" );
                 results_file = fullfile(model_results_dir, strcat(modelNames{i},'_',string(subset(length(subset))),'.xlsx'));
-
+                fprintf('Dataset: %s\n', string(subset(length(subset))));
                 it = 1;
                 expResults{1,1} = 'MR1';
                 expResults{1,2} = 'MR2';
@@ -1745,7 +2587,287 @@ for i = 1 : length(modelNames)
                     expResults{it,20} = tMR12;
                     expResults{it,21} = tCompositeMR;
                 end
-                xlswrite(results_file, expResults);                
+                xlswrite(results_file, expResults);           
+                
+                fprintf('composite MR12\n')
+                % 12
+                for k=1:noOfExecutions
+                    fprintf('Composite MR12 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.flip_left_right, @MRs.blur_image, detector);
+                    expResults{it,1} = 'flipLeftRight';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR13\n')
+                % 13
+                for k=1:noOfExecutions
+                    fprintf('Composite MR13 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.flip_up_down, @MRs.blur_image, detector);
+                    expResults{it,1} = 'flipUpDown';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR14\n')
+                % 14
+                for k=1:noOfExecutions
+                    fprintf('Composite MR14 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.rotate_image5m, @MRs.blur_image, detector);
+                    expResults{it,1} = 'rotateMinus5deg';
+                    expResults{it,2} = 'blur_image';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR15\n')
+                % 15
+                for k=1:noOfExecutions
+                    fprintf('Composite MR15 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20m, detector);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearMinus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+
+                fprintf('composite MR16\n')
+                % 16
+                for k=1:noOfExecutions
+                    fprintf('Composite MR16 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.rotate_image5p, @MRs.shear_image20p, detector);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'shearPlus20degrees';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR17\n')
+                % 17
+                for k=1:noOfExecutions
+                    fprintf('Composite MR17 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.rotate_image5p, @MRs.blur_image,detector);
+                    expResults{it,1} = 'rotatePlus5deg';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR18\n')
+                % 18
+                for k=1:noOfExecutions
+                    fprintf('Composite MR18 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.shear_image20m,@MRs.blur_image, detector);
+                    expResults{it,1} = 'shearMinus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);
+                
+                fprintf('composite MR19\n')
+                % 19
+                for k=1:noOfExecutions
+                    fprintf('Composite MR19 run %d\n', k)
+                    it = it+1;
+                    [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailureRateMR2, ...
+                    objcombinedFailureRateMR1MR2, classcombinedFailureRateMR1MR2, objcompositeMRFailureRate, ...
+                    classcompositeMRFailureRate, objDetectClassFailureRateMR1, objDetectClassFailureRateMR2, ...
+                    objDetectClassFailureRateMR1MR2, objDetectClassFailureRateMR12, ...
+                    compositeMRMutationScore, odCompositeMRMutationScore, ocCompositeMRMutationScore, ...   
+                    tMR1, tMR2, tMR12, tCompositeMR] = func_yolov3(datasets{j},@MRs.shear_image20p,@MRs.blur_image, detector);
+                    expResults{it,1} = 'shearPlus20degrees';
+                    expResults{it,2} = 'blurImage';
+                    expResults{it,3} = objfailureRateMR1;
+                    expResults{it,4} = objfailureRateMR2;
+                    expResults{it,5} = objcombinedFailureRateMR1MR2;
+                    expResults{it,6} = objcompositeMRFailureRate;                    
+                    expResults{it,7} = classfailureRateMR1;
+                    expResults{it,8} = classfailureRateMR2;
+                    expResults{it,9} = classcombinedFailureRateMR1MR2;
+                    expResults{it,10} = classcompositeMRFailureRate;  
+                    expResults{it,11} = objDetectClassFailureRateMR1;
+                    expResults{it,12} = objDetectClassFailureRateMR2;
+                    expResults{it,13} = objDetectClassFailureRateMR1MR2;
+                    expResults{it,14} = objDetectClassFailureRateMR12;
+                    expResults{it,15} = odCompositeMRMutationScore;
+                    expResults{it,16} = ocCompositeMRMutationScore;
+                    expResults{it,17} = compositeMRMutationScore;
+                    expResults{it,18} = tMR1;
+                    expResults{it,19} = tMR2;
+                    expResults{it,20} = tMR12;
+                    expResults{it,21} = tCompositeMR;
+                end
+                xlswrite(results_file, expResults);                    
             end
         otherwise
             fprintf('No actions found for %s',modelNames{i});
