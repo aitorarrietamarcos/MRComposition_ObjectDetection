@@ -8,7 +8,9 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
     if ~exist(dataset, 'dir')
        fprintf('invalid dataset directory')
        return;
-    end  
+    end 
+    fu1 = functions(followup1);
+    fu2 = functions(followup2);
     % Get all images from current dataset directory
     filePattern = fullfile(dataset, '*.jpg');
     theFiles = dir(filePattern);
@@ -20,17 +22,22 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
             % Get and preprocess source image
             image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
             [rows, columns, numberOfColorChannels] = size(image);
-            if numberOfColorChannels > 1 % filters out greyscale images
+            if numberOfColorChannels == 3 % filters out greyscale images
                 % Execute source testcase
                 %sourceTestcase = preprocess(detector,image);
-                %sourceTestcase = im2single(image);            
-                [bboxes,scores,labels] = detect(detector, image,'DetectionPreprocessing','auto');
+                %sourceTestcase = im2single(image);
+                sourceTestcase = imresize(image, [416 416]);              
+                [bboxes,scores,labels] = detect(detector, sourceTestcase,'DetectionPreprocessing','auto');
                 % store source testcase results
                 source_labels = labels;
                 source_noOfObjs = length(source_labels);
 
                 % generate followup testcase
                 followUpTestcase = followup1(image);
+                %resize image for shear image generators for
+                %yolov3
+                [rows, columns, numberOfColorChannels] = size(followUpTestcase);
+                followUpTestcase = imresize(followUpTestcase, [416 416]);
                 %followUpTestcase = preprocess(detector,followUpTestcase);
                 %followUpTestcase = im2single(followUpTestcase);
                 % Execute followup testcase
@@ -102,17 +109,21 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
             % Get source image
             image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
             [rows, columns, numberOfColorChannels] = size(image);
-            if numberOfColorChannels > 1 % filters out greyscale images
+            if numberOfColorChannels == 3 % filters out greyscale images
                 % Execute source testcase
                 %sourceTestcase = preprocess(detector,image);
                 %sourceTestcase = im2single(image);
-                [bboxes,scores,labels] = detect(detector,image,'DetectionPreprocessing','auto');
+                sourceTestcase = imresize(image, [416 416]);
+                [bboxes,scores,labels] = detect(detector,sourceTestcase,'DetectionPreprocessing','auto');
                 % store source testcase results
                 source_labels = labels;
                 source_noOfObjs = length(source_labels);
 
                 % generate followup testcase
                 followUpTestcase = followup2(image);
+                %resize image for shear image generators for
+                %yolov3
+                followUpTestcase = imresize(followUpTestcase, [416 416]);             
                 %followUpTestcase = preprocess(detector,followUpTestcase);
                 %followUpTestcase = im2single(followUpTestcase);
                 [bboxes,scores,labels] = detect(detector, followUpTestcase, 'DetectionPreprocessing','auto');
@@ -218,16 +229,20 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
             % Get source image
             image = imread(fullfile(theFiles(j).folder, theFiles(j).name));
             [rows, columns, numberOfColorChannels] = size(image);
-            if numberOfColorChannels > 1 % filters out greyscale images 
+            if numberOfColorChannels == 3 % filters out greyscale images 
                 %sourceTestcase = preprocess(detector,image);
-                %sourceTestcase = im2single(sourceTestcase); 
-                [bboxes,scores,labels] = detect(detector,image,'DetectionPreprocessing','auto');
+                %sourceTestcase = im2single(sourceTestcase);
+                sourceTestcase = imresize(image, [416 416]);
+                [bboxes,scores,labels] = detect(detector,sourceTestcase,'DetectionPreprocessing','auto');
                 % store source testcase results
                 source_labels = labels;
                 source_noOfObjs = length(source_labels);
 
                 % generate composite testcase
                 compositeTestcase = followup2(followup1(image));
+                %resize image for shear image generators for
+                %yolov3
+                compositeTestcase = imresize(compositeTestcase, [416 416]);             
                 %compositeTestcase = preprocess(detector,compositeTestcase);
                 %compositeTestcase = im2single(compositeTestcase);                
                 [bboxes,scores,labels] = detect(detector,compositeTestcase,'DetectionPreprocessing','auto');

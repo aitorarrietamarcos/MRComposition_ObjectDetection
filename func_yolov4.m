@@ -16,7 +16,7 @@ function [objfailureRateMR1, classfailureRateMR1, objfailureRateMR2, classfailur
     %% Execute MR1
     numOfValidTests = 0;
     tic;
-    for j = 1 : length(theFiles) % loop through images in dataset
+    for j = 1 : length(theFiles) % loop through images in dataset        
         % Get source image
         sourceTestcase = imread(fullfile(theFiles(j).folder, theFiles(j).name));
         [rows, columns, numberOfColorChannels] = size(sourceTestcase);
