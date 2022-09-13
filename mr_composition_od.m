@@ -4,20 +4,18 @@
 %       'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'
 clear;
 clc;
-
-modelNames = {'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'};
-%modelNames = {'tiny-yolov3-coco','efficientDetD0-coco'};
-%modelNames = {'tiny-yolov3-coco'};
-datasets = {'datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture','datasets/coco/cocoperson', ...
+%modelNames = {'tinyYOLOv2-coco', 'tiny-yolov3-coco', 'YOLOv4-coco', 'efficientDetD0-coco'};
+modelNames = {'efficientDetD0-coco'};
+datasets = {'datasets/oid/oidvehicle','datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture','datasets/coco/cocoperson', ...
     'datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture','datasets/oid/oidperson'};    % list of datasets
-%datasets = {'datasets/oid/oidvehicle','datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture','datasets/coco/cocoperson', ...
-%    'datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture','datasets/oid/oidperson'};    % list of datasets
-results_dir = 'results';                % results d ir
-noOfExecutions = 1;
+%datasets = {'datasets/coco/cocofood','datasets/coco/cocofurniture','datasets/oid/oidperson'};    % list of datasets
+results_dir = 'results';                % results dir
 % create results dir if not existing
 if ~exist(results_dir, 'dir')
    mkdir(results_dir)
 end
+
+noOfExecutions = 1; % no. of executions per model per dataset
 
 for i = 1 : length(modelNames)
     switch modelNames{i}
@@ -1660,9 +1658,9 @@ for i = 1 : length(modelNames)
                 expResults{1,12} = 'objClassDetectFailureRateMR2';
                 expResults{1,13} = 'objClassDetectFailureRateMR1_MR2';
                 expResults{1,14} = 'objClassDetectFailureRateMR12';
-                expResults{1,15} = 'objDetectCompositeMRMutationScore';
-                expResults{1,16} = 'objClassCompositeMRMutationScore';
-                expResults{1,17} = 'compositeMRMutationScore';                
+                expResults{1,15} = 'objDetectCompositeMRUniqueFaults';
+                expResults{1,16} = 'objClassCompositeMRUniqueFaults';
+                expResults{1,17} = 'compositeMRUniqueFaults';                
                 expResults{1,18} = 'timeMR1';
                 expResults{1,19} = 'timeMR2';
                 expResults{1,20} = 'timeMR12';
@@ -2331,7 +2329,7 @@ for i = 1 : length(modelNames)
                     expResults{it,20} = tMR12;
                     expResults{it,21} = tCompositeMR;
                 end
-                xlswrite(results_file, expResults);                   
+                xlswrite(results_file, expResults);
 
                 fprintf('composite MR20\n')
                 % 20
@@ -3248,9 +3246,9 @@ for i = 1 : length(modelNames)
                 expResults{1,12} = 'objClassDetectFailureRateMR2';
                 expResults{1,13} = 'objClassDetectFailureRateMR1_MR2';
                 expResults{1,14} = 'objClassDetectFailureRateMR12';
-                expResults{1,15} = 'objDetectCompositeMRMutationScore';
-                expResults{1,16} = 'objClassCompositeMRMutationScore';
-                expResults{1,17} = 'compositeMRMutationScore';                
+                expResults{1,15} = 'objDetectCompositeMRUniqueFaults';
+                expResults{1,16} = 'objClassCompositeMRUniqueFaults';
+                expResults{1,17} = 'compositeMRUniqueFaults';                
                 expResults{1,18} = 'timeMR1';
                 expResults{1,19} = 'timeMR2';
                 expResults{1,20} = 'timeMR12';
@@ -4824,9 +4822,9 @@ for i = 1 : length(modelNames)
                 expResults{1,12} = 'objClassDetectFailureRateMR2';
                 expResults{1,13} = 'objClassDetectFailureRateMR1_MR2';
                 expResults{1,14} = 'objClassDetectFailureRateMR12';
-                expResults{1,15} = 'objDetectCompositeMRMutationScore';
-                expResults{1,16} = 'objClassCompositeMRMutationScore';
-                expResults{1,17} = 'compositeMRMutationScore';                
+                expResults{1,15} = 'objDetectCompositeMRUniqueFaults';
+                expResults{1,16} = 'objClassCompositeMRUniqueFaults';
+                expResults{1,17} = 'compositeMRUniqueFaults';                
                 expResults{1,18} = 'timeMR1';
                 expResults{1,19} = 'timeMR2';
                 expResults{1,20} = 'timeMR12';
@@ -5496,6 +5494,7 @@ for i = 1 : length(modelNames)
                     expResults{it,21} = tCompositeMR;
                 end
                 xlswrite(results_file, expResults);
+
                 fprintf('composite MR20\n')
                 % 20
                 for k=1:noOfExecutions
