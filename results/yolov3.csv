@@ -1,0 +1,27 @@
+Average Values
+MRx-object detection,MRy-object detection,compositeMR-object detection,MRx-object classification,MRy-object classification,compositeMR-object classification,MRx-object detection_classification,MRy-object detection_classification,compositeMR-object detection_classification
+0.4169519570568189,0.30253914744545407,0.4531605626681822,0.7419811852340917,0.689374379618182,0.8095684317431813,0.2965009241249994,0.23007270029545476,0.3621986091545455
+Median values
+MRx-object detection,MRy-object detection,compositeMR-object detection,MRx-object classification,MRy-object classification,compositeMR-object classification,MRx-object detection_classification,MRy-object detection_classification,compositeMR-object detection_classification
+0.423558897,0.348370927,0.462753269,0.709273183,0.729335494,0.7986101619999999,0.245614035,0.233502538,0.339085613
+Shapiro Wilks pvalues
+MRx-object detection,MRy-object detection,compositeMR-object detection,MRx-object classification,MRy-object classification,compositeMR-object classification,MRx-object detection_classification,MRy-object detection_classification,compositeMR-object detection_classification
+2.546542646086891e-06,2.534493340027033e-14,6.835963404228096e-07,7.835042564827838e-14,3.89503707065586e-10,1.8622161104819845e-11,1.5406730982002936e-15,2.1259701627179134e-13,2.0571206960084965e-08
+TTest pvalues for MRx
+Object Detection-compositeMR:MRx,Object classification-compositeMR:MRx,Object Detection_Classification-compositeMR:MRx
+4.6328909384872704e-05,1.856311956335349e-12,6.327206546940857e-10
+TTest pvalues for MRy
+Object Detection-compositeMR:MRy,Object classification-compositeMR:MRy,Object Detection_Classification-compositeMR:MRy
+2.2034937009965255e-39,3.8776762411982135e-31,4.16871352447061e-31
+A12 Test results for MRx
+Object Detection-compositeMR:MRx,Object classification-compositeMR:MRx,Object Detection_Classification-compositeMR:MRx
+0.5882360537190082,0.6383884297520661,0.6292381198347108
+A12 Test results for MRy
+Object Detection-compositeMR:MRy,Object classification-compositeMR:MRy,Object Detection_Classification-compositeMR:MRy
+0.7303770661157025,0.7027479338842976,0.7140599173553719
+A12 Test labels for MRx
+Object Detection-compositeMR:MRx,Object classification-compositeMR:MRx,Object Detection_Classification-compositeMR:MRx
+S+,S+,S+
+A12 Test labels for MRy
+Object Detection-compositeMR:MRy,Object classification-compositeMR:MRy,Object Detection_Classification-compositeMR:MRy
+M+,M+,M+

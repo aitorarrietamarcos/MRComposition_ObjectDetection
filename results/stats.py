@@ -39,8 +39,14 @@ def average(lst):
 
 def getData(data, i):
     with open(outFiles[i], 'w',newline='') as out:
+        header_1 = ["MRx-object detection","MRy-object detection","compositeMR-object detection",
+        "MRx-object classification","MRy-object classification","compositeMR-object classification",
+        "MRx-object detection_classification","MRy-object detection_classification","compositeMR-object detection_classification"]
+        header_x = ["Object Detection-compositeMR:MRx","Object classification-compositeMR:MRx","Object Detection_Classification-compositeMR:MRx"]
+        header_y = ["Object Detection-compositeMR:MRy","Object classification-compositeMR:MRy","Object Detection_Classification-compositeMR:MRy"]
         writer = csv.writer(out)
         writer.writerow(["Average Values"])
+        writer.writerow(header_1)
         row = []
         avgData = []
         # get average of each column        
@@ -50,6 +56,7 @@ def getData(data, i):
         writer.writerow(row)
 
         writer.writerow(["Median values"])
+        writer.writerow(header_1)
         row = []
         mdnData = []   
         f = lambda x: statistics.median(np.array(data[:,x],dtype=float))
@@ -58,6 +65,7 @@ def getData(data, i):
         writer.writerow(row)
 
         writer.writerow(["Shapiro Wilks pvalues"])
+        writer.writerow(header_1)
         row = []
         swData = []
         f = lambda x: stats.shapiro(np.array(data[:,x],dtype=float))[1] # get p-value
@@ -66,7 +74,8 @@ def getData(data, i):
         writer.writerow(row)
 
 
-        writer.writerow(["TTest pvalues MRx"])
+        writer.writerow(["TTest pvalues for MRx"])
+        writer.writerow(header_x)
         row = []
         ttData = []
         f = lambda x: stats.ttest_ind(np.array(data[:,(x+2)],dtype=float), np.array(data[:,x],dtype=float)).pvalue
@@ -74,7 +83,8 @@ def getData(data, i):
         row.extend(ttData)
         writer.writerow(row)
 
-        writer.writerow(["TTest pvalues MRy"])
+        writer.writerow(["TTest pvalues for MRy"])
+        writer.writerow(header_y)
         row = []
         ttData = []
         f = lambda x: stats.ttest_ind(np.array(data[:,(x+2)],dtype=float), np.array(data[:,(x+1)],dtype=float)).pvalue
@@ -83,7 +93,8 @@ def getData(data, i):
         writer.writerow(row)        
 
 
-        writer.writerow(["A12 Test results MRx"])
+        writer.writerow(["A12 Test results for MRx"])
+        writer.writerow(header_x)
         row = []
         a12Data = []          
         f = lambda x: a12(np.array(data[:,(x+2)],dtype=float), np.array(data[:,x],dtype=float))
@@ -91,7 +102,8 @@ def getData(data, i):
         row.extend(a12Data)
         writer.writerow(row)
 
-        writer.writerow(["A12 Test results MRy"])
+        writer.writerow(["A12 Test results for MRy"])
+        writer.writerow(header_y)
         row = []
         a12Data = []          
         f = lambda x: a12(np.array(data[:,(x+2)],dtype=float), np.array(data[:,(x+1)],dtype=float))
@@ -99,7 +111,8 @@ def getData(data, i):
         row.extend(a12Data)
         writer.writerow(row)
 
-        writer.writerow(["A12 Test labels MRx"])
+        writer.writerow(["A12 Test labels for MRx"])
+        writer.writerow(header_x)
         row = []
         a12Data = []          
         f = lambda x: a12toChar(a12(np.array(data[:,(x+2)],dtype=float), np.array(data[:,x],dtype=float)))
@@ -107,7 +120,8 @@ def getData(data, i):
         row.extend(a12Data)
         writer.writerow(row)
 
-        writer.writerow(["A12 Test labels MRy"])
+        writer.writerow(["A12 Test labels for MRy"])
+        writer.writerow(header_y)
         row = []
         a12Data = []          
         f = lambda x: a12toChar(a12(np.array(data[:,(x+2)],dtype=float), np.array(data[:,(x+1)],dtype=float)))
