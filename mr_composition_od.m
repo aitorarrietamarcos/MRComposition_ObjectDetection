@@ -4,11 +4,9 @@
 %       'YOLOv4-coco','efficientDetD0-coco','tinyYOLOv2-coco','tiny-yolov3-coco'
 clear;
 clc;
-%modelNames = {'tinyYOLOv2-coco', 'tiny-yolov3-coco', 'YOLOv4-coco', 'efficientDetD0-coco'};
-modelNames = {'efficientDetD0-coco'};
+modelNames = {'tinyYOLOv2-coco', 'tiny-yolov3-coco', 'YOLOv4-coco', 'efficientDetD0-coco'};
 datasets = {'datasets/oid/oidvehicle','datasets/oid/oidanimal','datasets/oid/oidfood', 'datasets/oid/oidfurniture','datasets/coco/cocoperson', ...
     'datasets/coco/cocovehicle','datasets/coco/cocoanimal','datasets/coco/cocofood','datasets/coco/cocofurniture','datasets/oid/oidperson'};    % list of datasets
-%datasets = {'datasets/coco/cocofood','datasets/coco/cocofurniture','datasets/oid/oidperson'};    % list of datasets
 results_dir = 'results';                % results dir
 % create results dir if not existing
 if ~exist(results_dir, 'dir')
