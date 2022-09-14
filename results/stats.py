@@ -8,7 +8,7 @@ from a12test import a12
 inputFiles = ['YOLOv4_Summary.csv','tiny-yolov3_Summary.csv','tinyYOLOv2_Summary.csv','efficientDetD0_Summary.csv']
 #inputFiles = ['YOLOv4_Summary.csv']
 outFiles = ['yolov4.csv','yolov3.csv','yolov2.csv','edetd0.csv']
-#outFiles1 = ['yolov4_stat.csv','yolov3_stat.csv','yolov2_stat.csv','edetd0_stat.csv']
+outFiles1 = ['yolov4_stat.csv','yolov3_stat.csv','yolov2_stat.csv','edetd0_stat.csv']
 #outFiles1 = ['yolov4_stat.csv']
 
 
@@ -348,4 +348,4 @@ def mr_comparison():
 
 if __name__ == '__main__':
     main() # read data from source dir into data structures
-    #mr_comparison()
+    mr_comparison()
